@@ -47,13 +47,13 @@ impl Format {
 /// Serialize a value using `bincode`, based on `serde`.
 ///
 /// This format is compact, but provides no backwards compatibility.
-pub(crate) fn bincode_serialize<T: Serialize>(value: &T) -> std::io::Result<Vec<u8>> {
+pub fn bincode_serialize<T: Serialize>(value: &T) -> std::io::Result<Vec<u8>> {
     let config = bincode::config::legacy().with_limit::<{ u32::MAX as usize }>();
     bincode::serde::encode_to_vec(value, config).map_err(std::io::Error::other)
 }
 
 /// Deserialize a value using `bincode`, based on `serde`.
-pub(crate) fn bincode_deserialize<T: for<'a> Deserialize<'a>>(buf: &[u8]) -> std::io::Result<T> {
+pub fn bincode_deserialize<T: for<'a> Deserialize<'a>>(buf: &[u8]) -> std::io::Result<T> {
     let config = bincode::config::legacy().with_limit::<{ u32::MAX as usize }>();
     bincode::serde::borrow_decode_from_slice(buf, config)
         .map(|(result, _)| result)
@@ -70,7 +70,7 @@ pub(crate) fn bincode_deserialize<T: for<'a> Deserialize<'a>>(buf: &[u8]) -> std
 /// Set `compact` to `true` if we want old readers to fail when a new field is added to a struct,
 /// that is, if we think that ignoring a new field could lead to incorrect behavior.
 #[allow(dead_code)]
-pub(crate) fn msgpack_serialize<T: Serialize>(
+pub fn msgpack_serialize<T: Serialize>(
     value: &T,
     compact: bool,
 ) -> std::io::Result<Vec<u8>> {
@@ -88,7 +88,7 @@ pub(crate) fn msgpack_serialize<T: Serialize>(
 
 /// Deserialize a value using MessagePack, based on `serde`.
 #[allow(dead_code)]
-pub(crate) fn msgpack_deserialize<T: for<'a> Deserialize<'a>>(buf: &[u8]) -> std::io::Result<T> {
+pub fn msgpack_deserialize<T: for<'a> Deserialize<'a>>(buf: &[u8]) -> std::io::Result<T> {
     rmp_serde::from_slice(buf).map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidInput, e))
 }
 

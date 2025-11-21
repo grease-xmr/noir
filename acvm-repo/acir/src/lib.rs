@@ -20,6 +20,7 @@ pub use brillig;
 pub use circuit::black_box_functions::BlackBoxFunc;
 pub use circuit::opcodes::InvalidInputBitSize;
 pub use parser::parse_opcodes;
+pub use serialization::{bincode_deserialize, bincode_serialize, msgpack_deserialize, msgpack_serialize};
 
 #[cfg(test)]
 mod reflection {
